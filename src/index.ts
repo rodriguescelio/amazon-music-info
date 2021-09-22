@@ -68,7 +68,7 @@ const requestData = async (
           )
           ?.items.map<AmazonMusicInfoResultItem>(it => ({
             name: it.primaryText as string,
-            artist: it.secondaryText1,
+            artist: it.secondaryText1 || '',
             duration: getDurationInSeconds(it.secondaryText3),
             artist_url: AMAZON_URL + it.secondaryText1Link.deeplink,
             url: AMAZON_URL + it.primaryLink.deeplink,
@@ -83,7 +83,7 @@ const requestData = async (
           )
           ?.items.map<AmazonMusicInfoResultItem>(it => ({
             name: it.primaryText as string,
-            artist: it.secondaryText2,
+            artist: it.secondaryText2 || '',
             duration: getDurationInSeconds(it.secondaryText3),
             artist_url: AMAZON_URL + it.secondaryText2Link.deeplink,
             url: AMAZON_URL + it.primaryLink.deeplink,
@@ -98,7 +98,7 @@ const requestData = async (
           )
           ?.items.map<AmazonMusicInfoResultItem>(it => ({
             name: (it.primaryText as any).text,
-            artist: it.secondaryText,
+            artist: it.secondaryText || method?.template.headerText.text as string,
             duration: null,
             artist_url: AMAZON_URL + it.secondaryLink.deeplink,
             url: AMAZON_URL + it.primaryLink.deeplink,
