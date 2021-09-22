@@ -1,5 +1,5 @@
-import { DeeplinkTemplateHeader } from "./deeplinkTemplateHeader";
-import { DeeplinkTemplateWidget } from "./deeplinkTemplateWidget";
+import { DeeplinkTemplateHeader } from './deeplinkTemplateHeader';
+import { DeeplinkTemplateWidget } from './deeplinkTemplateWidget';
 
 export interface DeeplinkTemplate {
   interface: string;

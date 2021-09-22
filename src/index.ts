@@ -19,9 +19,11 @@ const SERVICE_URL = 'https://na.mesk.skill.music.a2z.com/api/showHome';
 
 const DEFAULT_OPTIONS = {
   headers: {
-    'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
+    'user-agent':
+      'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
     'x-amzn-application-version': '1.0.7980.0',
-    'x-amzn-authentication': '{"interface":"ClientAuthenticationInterface.v1_0.ClientTokenElement","accessToken":""}',
+    'x-amzn-authentication':
+      '{"interface":"ClientAuthenticationInterface.v1_0.ClientTokenElement","accessToken":""}',
     'x-amzn-device-family': 'WebPlayer',
     'x-amzn-device-height': '1080',
     'x-amzn-device-id': '13436091444745537',
@@ -33,14 +35,26 @@ const DEFAULT_OPTIONS = {
     'x-amzn-page-url': AMAZON_URL,
     'x-amzn-session-id': '133-3289044-2947901',
     'x-amzn-timestamp': '1631644168280',
-  }
+  },
 };
 
-const requestData = async (code: string, type: AmazonMusicUrlType): Promise<AmazonMusicInfoResult | null> => {
+const requestData = async (
+  code: string,
+  type: AmazonMusicUrlType
+): Promise<AmazonMusicInfoResult | null> => {
   const deeplink = `%7B%22interface%22%3A%22DeeplinkInterface.v1_0.DeeplinkClientInformation%22%2C%22deeplink%22%3A%22%2F${type}%2F${code}%22%7D`;
   try {
-    const request = await axios.get<DeeplinkResponse>(`${SERVICE_URL}?deeplink=${deeplink}`, DEFAULT_OPTIONS).then(res => res.data);
-    const method = request.methods.find(it => it.interface === 'TemplateListInterface.v1_0.CreateAndBindTemplateMethod');
+    const request = await axios
+      .get<DeeplinkResponse>(
+        `${SERVICE_URL}?deeplink=${deeplink}`,
+        DEFAULT_OPTIONS
+      )
+      .then(res => res.data);
+    const method = request.methods.find(
+      it =>
+        it.interface ===
+        'TemplateListInterface.v1_0.CreateAndBindTemplateMethod'
+    );
 
     let items: AmazonMusicInfoResultItem[] | undefined;
 
@@ -48,10 +62,11 @@ const requestData = async (code: string, type: AmazonMusicUrlType): Promise<Amaz
       case AmazonMusicUrlType.PLAYLIST:
         items = method?.template.widgets
           .find(
-            it => it.interface === 'Web.TemplatesInterface.v1_0.Touch.WidgetsInterface.VisualTableWidgetElement'
+            it =>
+              it.interface ===
+              'Web.TemplatesInterface.v1_0.Touch.WidgetsInterface.VisualTableWidgetElement'
           )
-          ?.items
-          .map<AmazonMusicInfoResultItem>(it => ({
+          ?.items.map<AmazonMusicInfoResultItem>(it => ({
             name: it.primaryText as string,
             artist: it.secondaryText1,
             duration: getDurationInSeconds(it.secondaryText3),
@@ -62,10 +77,11 @@ const requestData = async (code: string, type: AmazonMusicUrlType): Promise<Amaz
       case AmazonMusicUrlType.ALBUM:
         items = method?.template.widgets
           .find(
-            it => it.interface === 'Web.TemplatesInterface.v1_0.Touch.WidgetsInterface.DescriptiveTableWidgetElement'
+            it =>
+              it.interface ===
+              'Web.TemplatesInterface.v1_0.Touch.WidgetsInterface.DescriptiveTableWidgetElement'
           )
-          ?.items
-          .map<AmazonMusicInfoResultItem>(it => ({
+          ?.items.map<AmazonMusicInfoResultItem>(it => ({
             name: it.primaryText as string,
             artist: it.secondaryText2,
             duration: getDurationInSeconds(it.secondaryText3),
@@ -76,10 +92,11 @@ const requestData = async (code: string, type: AmazonMusicUrlType): Promise<Amaz
       case AmazonMusicUrlType.ARTIST:
         items = method?.template.widgets
           .find(
-            it => it.interface === 'Web.TemplatesInterface.v1_0.Touch.WidgetsInterface.DescriptiveShowcaseWidgetElement'
+            it =>
+              it.interface ===
+              'Web.TemplatesInterface.v1_0.Touch.WidgetsInterface.DescriptiveShowcaseWidgetElement'
           )
-          ?.items
-          .map<AmazonMusicInfoResultItem>(it => ({
+          ?.items.map<AmazonMusicInfoResultItem>(it => ({
             name: (it.primaryText as any).text,
             artist: it.secondaryText,
             duration: null,
@@ -92,18 +109,19 @@ const requestData = async (code: string, type: AmazonMusicUrlType): Promise<Amaz
     return {
       type,
       items: items || [],
-      title: method?.template.headerText.text as string
+      title: method?.template.headerText.text as string,
     };
-  } catch (e) {
-
-  }
+  } catch (e) {}
 
   return null;
 };
 
-export const getPlaylistData = (code: string) => requestData(code, AmazonMusicUrlType.PLAYLIST);
-export const getArtistData = (code: string) => requestData(code, AmazonMusicUrlType.ARTIST);
-export const getAlbumData = (code: string) => requestData(code, AmazonMusicUrlType.ALBUM);
+export const getPlaylistData = (code: string) =>
+  requestData(code, AmazonMusicUrlType.PLAYLIST);
+export const getArtistData = (code: string) =>
+  requestData(code, AmazonMusicUrlType.ARTIST);
+export const getAlbumData = (code: string) =>
+  requestData(code, AmazonMusicUrlType.ALBUM);
 
 export const getData = (url: string) => {
   if (isAmazonMusic(url)) {

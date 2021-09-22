@@ -1,5 +1,5 @@
-import { AmazonMusicInfoResultItem } from "./AmazonMusicInfoResultItem";
-import { AmazonMusicUrlType } from "./amazonMusicUrlType";
+import { AmazonMusicInfoResultItem } from './AmazonMusicInfoResultItem';
+import { AmazonMusicUrlType } from './amazonMusicUrlType';
 
 export interface AmazonMusicInfoResult {
   type: AmazonMusicUrlType;

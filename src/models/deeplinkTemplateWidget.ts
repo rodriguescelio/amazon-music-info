@@ -1,4 +1,4 @@
-import { DeeplinkTemplateWidgetItem } from "./deeplinkTemplateWidgetItem";
+import { DeeplinkTemplateWidgetItem } from './deeplinkTemplateWidgetItem';
 
 export interface DeeplinkTemplateWidget {
   interface: string;

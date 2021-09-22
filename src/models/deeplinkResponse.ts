@@ -1,4 +1,4 @@
-import { DeeplinkMethod } from "./deeplinkMethod";
+import { DeeplinkMethod } from './deeplinkMethod';
 
 export interface DeeplinkResponse {
   methods: DeeplinkMethod[];

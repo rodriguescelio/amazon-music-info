@@ -1,4 +1,4 @@
-import { AmazonMusicUrlType } from "../models/amazonMusicUrlType";
+import { AmazonMusicUrlType } from '../models/amazonMusicUrlType';
 
 export const isAmazonMusic = (url: string) =>
   url.indexOf('music.amazon.com') !== -1;

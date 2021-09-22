@@ -1,8 +1,10 @@
 export interface DeeplinkTemplateWidgetItem {
   interface: string;
-  primaryText: string | {
-    text: string;
-  };
+  primaryText:
+    | string
+    | {
+        text: string;
+      };
   primaryLink: {
     interface: string;
     deeplink: string;
