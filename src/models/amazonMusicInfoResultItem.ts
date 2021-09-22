@@ -1,7 +1,7 @@
 export interface AmazonMusicInfoResultItem {
   name: string;
-  artist: string;
+  artist: string | null;
   duration: number | null;
-  artist_url: string;
+  artist_url: string | null;
   url: string;
 }

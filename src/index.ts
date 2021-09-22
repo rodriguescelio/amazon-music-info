@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AmazonMusicInfoResult } from './models/amazonMusicInfoResult';
-import { AmazonMusicInfoResultItem } from './models/AmazonMusicInfoResultItem';
+import { AmazonMusicInfoResultItem } from './models/amazonMusicInfoResultItem';
 import { AmazonMusicUrlType } from './models/amazonMusicUrlType';
 import { DeeplinkResponse } from './models/deeplinkResponse';
 import { getDurationInSeconds } from './utils/datetime.util';
@@ -81,13 +81,17 @@ const requestData = async (
               it.interface ===
               'Web.TemplatesInterface.v1_0.Touch.WidgetsInterface.DescriptiveTableWidgetElement'
           )
-          ?.items.map<AmazonMusicInfoResultItem>(it => ({
-            name: it.primaryText as string,
-            artist: it.secondaryText2 || '',
-            duration: getDurationInSeconds(it.secondaryText3),
-            artist_url: AMAZON_URL + it.secondaryText2Link.deeplink,
-            url: AMAZON_URL + it.primaryLink.deeplink,
-          }));
+          ?.items.map<AmazonMusicInfoResultItem>(it => {
+            const artist = it.secondaryText2 || '';
+            const artist_url = it.secondaryText2Link ? AMAZON_URL + it.secondaryText2Link.deeplink : null;
+            return {
+              artist,
+              artist_url,
+              name: it.primaryText as string,
+              duration: getDurationInSeconds(it.secondaryText3),
+              url: AMAZON_URL + it.primaryLink.deeplink,
+            };
+          });
         break;
       case AmazonMusicUrlType.ARTIST:
         items = method?.template.widgets
@@ -96,13 +100,17 @@ const requestData = async (
               it.interface ===
               'Web.TemplatesInterface.v1_0.Touch.WidgetsInterface.DescriptiveShowcaseWidgetElement'
           )
-          ?.items.map<AmazonMusicInfoResultItem>(it => ({
-            name: (it.primaryText as any).text,
-            artist: it.secondaryText || method?.template.headerText.text as string,
-            duration: null,
-            artist_url: AMAZON_URL + it.secondaryLink.deeplink,
-            url: AMAZON_URL + it.primaryLink.deeplink,
-          }));
+          ?.items.map<AmazonMusicInfoResultItem>(it => {
+            const artist = it.secondaryText || method?.template.headerText.text;
+            const artist_url = it.secondaryLink ? AMAZON_URL + it.secondaryLink.deeplink : null;
+            return {
+              artist,
+              artist_url,
+              name: (it.primaryText as any).text,
+              duration: null,
+              url: AMAZON_URL + it.primaryLink.deeplink,
+            };
+          });
         break;
     }
 
@@ -111,7 +119,10 @@ const requestData = async (
       items: items || [],
       title: method?.template.headerText.text as string,
     };
-  } catch (e) {}
+  } catch (e) {
+    // @ts-ignore
+    console.log('catch error', e.message);
+  }
 
   return null;
 };
