@@ -6,6 +6,9 @@ export const isAmazonMusic = (url: string) =>
 export const isAmazonMusicType = (url: string, type: AmazonMusicUrlType) =>
   isAmazonMusic(url) && url.indexOf(`/${type}/`) !== -1;
 
+export const isAmazonMusicUserPlaylist = (url: string) =>
+  isAmazonMusicType(url, AmazonMusicUrlType.USER_PLAYLIST);
+
 export const isAmazonMusicPlaylist = (url: string) =>
   isAmazonMusicType(url, AmazonMusicUrlType.PLAYLIST);
 
