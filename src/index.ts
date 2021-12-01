@@ -10,6 +10,7 @@ import {
   isAmazonMusicAlbum,
   isAmazonMusicArtist,
   isAmazonMusicPlaylist,
+  isAmazonMusicUserPlaylist,
 } from './utils/url.util';
 
 export * from './utils/url.util';
@@ -59,6 +60,7 @@ const requestData = async (
     let items: AmazonMusicInfoResultItem[] | undefined;
 
     switch (type) {
+      case AmazonMusicUrlType.USER_PLAYLIST:
       case AmazonMusicUrlType.PLAYLIST:
         items = method?.template.widgets
           .find(
@@ -137,7 +139,9 @@ export const getAlbumData = (code: string) =>
 export const getData = (url: string) => {
   if (isAmazonMusic(url)) {
     let codeType;
-    if (isAmazonMusicPlaylist(url)) {
+    if(isAmazonMusicUserPlaylist(url)) {
+      codeType = AmazonMusicUrlType.USER_PLAYLIST;
+    } else if (isAmazonMusicPlaylist(url)) {
       codeType = AmazonMusicUrlType.PLAYLIST;
     } else if (isAmazonMusicArtist(url)) {
       codeType = AmazonMusicUrlType.ARTIST;
